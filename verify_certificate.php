@@ -19,6 +19,16 @@ if ($code !== '') {
     $stmt->execute();
     $certificate = $stmt->get_result()->fetch_assoc();
     $stmt->close();
+    // Fetch CEO details for signature
+    $ceoStmt = $conn->prepare("SELECT full_name, image_path FROM management_officers WHERE role_title LIKE ? LIMIT 1");
+    $ceoRole = "%CEO%";
+    $ceoStmt->bind_param("s", $ceoRole);
+    $ceoStmt->execute();
+    $ceoInfo = $ceoStmt->get_result()->fetch_assoc();
+    $ceoStmt->close();
+    $ceoName = $ceoInfo['full_name'] ?? 'CEO';
+    $ceoSignature = $ceoInfo['image_path'] ?? '';
+
 }
 ?>
 <?php include 'includes/header.php'; ?>
